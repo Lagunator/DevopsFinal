@@ -10,7 +10,7 @@ sudo yum install -y git gcc gcc-c++ make tar
 sudo amazon-linux-extras enable python3.8  # Ensure Amazon Linux provides Python 3
 sudo yum install -y python3 python3-pip
 
-# Install Docker and Docker Compose
+# Install Docker
 sudo amazon-linux-extras enable docker
 sudo yum install -y docker
 sudo systemctl start docker
@@ -18,8 +18,8 @@ sudo systemctl enable docker
 sudo usermod -aG docker ec2-user
 
 # Install Docker Compose
-DOCKER_COMPOSE_VERSION="2.20.2"
-sudo curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+DOCKER_COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -Po '"tag_name": "\K[0-9.v]+')
+sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 
 # Verify Docker Compose installation
@@ -53,5 +53,5 @@ export HF_TOKEN="${huggingface_token}"
 python3 scripts/download_model.py
 
 # Start chatty-llama using Docker Compose
-docker-compose up -d
+docker-compose up -d
 EOF
