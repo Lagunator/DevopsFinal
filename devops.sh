@@ -21,6 +21,14 @@ sudo usermod -aG docker ec2-user
 sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -Po '"tag_name": "\K[0-9.v]+')" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 
+# Verify Docker Compose installation
+if ! command -v docker-compose &> /dev/null; then
+    echo "docker-compose could not be found. Adding to PATH manually."
+    sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+fi
+
+docker-compose --version
+
 # Switch to ec2-user and set up the environment
 sudo -i -u ec2-user bash <<EOF
 cd ~
