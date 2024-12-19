@@ -18,7 +18,8 @@ sudo systemctl enable docker
 sudo usermod -aG docker ec2-user
 
 # Install Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -Po '"tag_name": "\K[0-9.v]+')" -o /usr/local/bin/docker-compose
+DOCKER_COMPOSE_VERSION="2.20.2"
+sudo curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 
 # Verify Docker Compose installation
