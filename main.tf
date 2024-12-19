@@ -42,7 +42,7 @@ variable "huggingface_token" {
 
 
 resource "aws_instance" "lagu_llama" {
-  ami           = "ami-01816d07b1128cd2d" 
+  ami           = "ami-0e2c8caa4b6378d8c" 
   instance_type = "t2.micro"
   key_name      = aws_key_pair.ec2_key.key_name
 
