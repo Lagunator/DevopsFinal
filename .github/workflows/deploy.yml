@@ -1,0 +1,39 @@
+name: Ultima chance de aprobar
+
+on: 
+  workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.6.0  
+
+    - name: Initialize Terraform
+      run: terraform init
+
+  
+    - name: Destroy Existing Infrastructure
+      run: terraform destroy -var="huggingface_token=${{ secrets.HF_TOKEN }}" -auto-approve
+      continue-on-error: true  
+  
+    - name: Plan Terraform
+      run: terraform plan -var="huggingface_token=${{ secrets.HF_TOKEN }}"
+
+    
+    - name: Apply Terraform
+      run: terraform apply -var="huggingface_token=${{ secrets.HF_TOKEN }}" -auto-approve
