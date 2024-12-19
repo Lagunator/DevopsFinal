@@ -2,37 +2,27 @@
 exec > /var/log/user_data.log 2>&1
 set -x
 
-# Update and upgrade the system
+# Update the system
 sudo yum update -y
-sudo yum upgrade -y
 
-# Install required system packages
-sudo yum install -y amazon-linux-extras
+# Install required packages
+sudo yum install -y git gcc gcc-c++ make tar
 sudo amazon-linux-extras enable python3.8
-sudo yum install -y python3.8 python3-pip python3-venv \
-    git gcc gcc-c++ make curl tar
+sudo yum install -y python3.8 python3.8-pip
 
 # Install Docker
 sudo amazon-linux-extras enable docker
 sudo yum install -y docker
 sudo systemctl start docker
 sudo systemctl enable docker
-
-# Add 'ec2-user' to Docker group
 sudo usermod -aG docker ec2-user
 
-# Install Rust (as the 'ec2-user')
-sudo -i -u ec2-user bash <<EOF
-curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-EOF
-
-# Clone the repository and set up Python environment
 sudo -i -u ec2-user bash <<EOF
 cd ~
-git clone https://github.com/Sollimann/chatty-llama
+git clone https://github.com/Sollimann/chatty-llama.git
 cd chatty-llama
 
-# Install Python virtual environment and dependencies
+# Create Python virtual environment
 python3.8 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
