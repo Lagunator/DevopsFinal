@@ -73,5 +73,5 @@ terraform {
 
 
 output "instance_ip" {
-  value = aws_instance.chatty_llama.public_ip
+  value = aws_instance.lagu_llama.public_ip
 }
